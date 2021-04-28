@@ -16,5 +16,13 @@ link-citations: yes
 
 # 1 Introduction {-}
 
+* Book site: https://www.statlearning.com/
+
+* Online course: https://www.dataschool.io/15-hours-of-expert-machine-learning-videos/
+
+* Forum: https://www.statlearning.com/forum
+
+* Answers: https://github.com/asadoughi/stat-learning
+
 
 

@@ -12,3 +12,104 @@
 
 ![](images/ch02-02.png){ style="width: 90%" .center}
 
+### The curse of dimensionality {-}
+
+::: {.rmdbox}
+
+* Imagine we have a volume of $1$ in $p$ dimensions. 
+
+* We want to build a cube in this space that has $10\%$ of the original volume.
+
+* What is the length of the edge of this cube?
+
+:::
+
+
+#### $p = 1$ {-}
+
+* In this case, the "volume" is a line segment with length $1$.
+
+* Our "cube" will have edge length $1/10$.
+
+
+#### $p = 2$ {-}
+
+* In this case, the "volume" is a square with side length $1$.
+
+* The "cube" will have "volume" $1/10$, which gives a square with side length $1/\sqrt{10} = `r 1/sqrt(10)`$.
+
+
+#### $p = 3$ {-}
+
+* In this case, the volume is a cube with edge length $1$.
+
+* The smaller cube will have volume $1/10$, which gives edge length $1/\sqrt[3]{10} = `r 1/10^(1/3)`$.
+
+
+#### $p = 4$ {-}
+
+* In this case, the volume is a hypercube with "edge" length $1$.
+
+* The smaller hypercube will have volume $1/10$, which gives a hypercube with "edge" length $1/\sqrt[4]{10} = `r 1/10^(1/4)`$.
+
+
+#### In general {-}
+
+* In $p$ dimensions, for a smaller cube of volume $x\%$ of the original, the edge length will be $\sqrt[p]{x/100}$.
+
+* Graphically
+
+    ```{r echo=FALSE}
+    el <- function(x, p) { (x/100)^(1/p) }
+    max_perc <- 20
+    
+    p <- c(1, 2, 3, 4, 6, 8)
+    
+    curves <- p %>% 
+      map(
+        ~stat_function(
+          mapping = aes(color = factor(.x)),
+          fun = el,
+          args = list(p = .x),
+          geom = 'line',
+          show.legend = FALSE
+        )
+      )
+    
+    ggplot() +
+      curves +
+      scale_x_continuous(
+        limits = c(0, max_perc),
+        expand = c(0,0)
+      ) +
+      scale_y_continuous(
+        sec.axis = sec_axis(
+          ~.,
+          name = 'dimensions',
+          breaks = el(max_perc, p),
+          labels = p
+        )
+      ) +
+      labs(
+        title = 'The curse of dimensionality',
+        subtitle = 'Length needed along each axis to cover percent of total volume\nof hypercube with edge length 1',
+        x = 'percent of total volume',
+        y = 'length'
+      )
+    ```
+
+
+
+## 2.2 Assessing model accuracy {-}
+
+### 2.2.1 Measuring the quality of fit {-}
+
+
+### 2.2.2 The bias-variance trade-off {-}
+
+
+### 2.2.3 The classification setting {-}
+
+
+## 2.4 Exercises {-}
+

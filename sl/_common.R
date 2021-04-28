@@ -5,10 +5,10 @@ library(knitr)
 opts_chunk$set(
   collapse = TRUE,
   cache = TRUE,
-  out.width = "70%",
+  out.width = "90%",
   fig.align = 'center',
-  fig.width = 6,
-  fig.asp = 0.618,  # 1 / phi
+  fig.width = 7,
+  # fig.asp = 0.618,  # 1 / phi
   fig.show = "hold"
 )
 
@@ -44,6 +44,12 @@ theme_set(
          margin = margin(r = 20),            # Separate y axis title a little
          vjust = .5                          # Leave y axis title in the middle
       ),
+      axis.title.y.right = element_text(
+         angle = 0,                          # Never rotate y axis title
+         margin = margin(l = 20),            # Separate y axis title a little
+         vjust = .5                          # Leave y axis title in the middle
+      ),
+      axis.ticks.y.right = element_blank(),  # No ticks on secondary y axis
       axis.title.x.bottom = element_text(
          margin = margin(t = 20)             # Separate x axis title a little
       ),
@@ -105,3 +111,6 @@ embed_yt <- function(code) {
   }
 
 }
+
+library(ISLR)
+library(MASS)
