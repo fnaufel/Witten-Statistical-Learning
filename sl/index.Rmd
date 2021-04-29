@@ -1,5 +1,4 @@
 --- 
-knit: "bookdown::render_book"
 title: "An Introduction to Statistical Learning with Applications in R"
 author: "fnaufel"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
@@ -15,6 +14,24 @@ link-citations: yes
 ---
 
 # 1 Introduction {-}
+
+
+* No braces: $1,23$
+
+* Braces: $1{,}23$
+
+* Inline R with fm: $`r (123/100) %>% fm()`$
+
+* Inline R without fm: $`r 123/100`$
+
+* Chunk
+
+```{r}
+123/100
+```
+
+
+
 
 * Book site: https://www.statlearning.com/
 

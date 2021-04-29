@@ -16,11 +16,11 @@
 
 ::: {.rmdbox}
 
-* Imagine we have a volume of $1$ in $p$ dimensions. 
+* Imagine we have a cube with a volume of $1$ in $p$ dimensions. 
 
-* We want to build a cube in this space that has $10\%$ of the original volume.
+* We want to build a smaller cube in this space with $10\%$ of the original volume.
 
-* What is the length of the edge of this cube?
+* What is the length of the edge of this smaller cube?
 
 :::
 
@@ -29,14 +29,14 @@
 
 * In this case, the "volume" is a line segment with length $1$.
 
-* Our "cube" will have edge length $1/10$.
+* Our smaller "cube" will have edge length $1/10$.
 
 
 #### $p = 2$ {-}
 
 * In this case, the "volume" is a square with side length $1$.
 
-* The "cube" will have "volume" $1/10$, which gives a square with side length $1/\sqrt{10} = `r 1/sqrt(10)`$.
+* The smaller "cube" will have "volume" $1/10$, which gives a square with side length $1/\sqrt{10} = `r 1/sqrt(10)`$.
 
 
 #### $p = 3$ {-}
@@ -55,15 +55,15 @@
 
 #### In general {-}
 
-* In $p$ dimensions, for a smaller cube of volume $x\%$ of the original, the edge length will be $\sqrt[p]{x/100}$.
+* In $p$ dimensions, for a smaller cube of volume a fraction $x$ of the original, the edge length will be $\sqrt[p]{x}$.
 
-* Graphically
+* Graphically:
 
     ```{r echo=FALSE}
-    el <- function(x, p) { (x/100)^(1/p) }
-    max_perc <- 20
+    el <- function(x, p) { (x)^(1/p) }
+    max_perc <- .2
     
-    p <- c(1, 2, 3, 4, 6, 8)
+    p <- c(1, 2, 3, 4, 6, 10)
     
     curves <- p %>% 
       map(
@@ -87,17 +87,28 @@
           ~.,
           name = 'dimensions',
           breaks = el(max_perc, p),
-          labels = p
+          labels = paste('p =', p)
         )
       ) +
       labs(
         title = 'The curse of dimensionality',
-        subtitle = 'Length needed along each axis to cover percent of total volume\nof hypercube with edge length 1',
-        x = 'percent of total volume',
-        y = 'length'
+        subtitle = 'Length needed along each axis to cover fraction of total volume\nof hypercube with edge length 1',
+        x = 'fraction of total volume',
+        y = 'length\nneeded'
       )
     ```
 
+::: {.rmdcaution}
+
+### Moral: {-}
+
+In high dimensions, locality does not exist: even the smallest volumes require long distances.
+
+:::
+
+$1{,}23$
+
+$`r 1.23`$
 
 
 ## 2.2 Assessing model accuracy {-}
