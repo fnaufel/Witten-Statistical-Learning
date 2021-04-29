@@ -14,6 +14,10 @@
 
 ### The curse of dimensionality {-}
 
+In [Chapter 3](#linear-regression) and in the [exercises for Chapter 4](#classification), there is a discussion about why averaging the neighbors of a data point $\vec{x}$ to calculate $\hat f(\vec x)$ is not a good idea.
+
+The problem is that in higher dimensions, the "neighbors" are not so local anymore, as the following exercise shows.
+
 ::: {.rmdbox}
 
 * Imagine we have a cube with a volume of $1$ in $p$ dimensions. 
@@ -55,7 +59,7 @@
 
 #### In general {-}
 
-* In $p$ dimensions, for a smaller cube of volume a fraction $x$ of the original, the edge length will be $\sqrt[p]{x}$.
+* In $p$ dimensions, for a smaller cube having a fraction $x$ of the volume of the original, the edge length will be $\sqrt[p]{x}$.
 
 * Graphically:
 
@@ -106,17 +110,39 @@ In high dimensions, locality does not exist: even the smallest volumes require l
 
 :::
 
-$1{,}23$
-
-$`r 1.23`$
-
 
 ## 2.2 Assessing model accuracy {-}
 
+```{r echo=FALSE, results='asis', out.extra=center()}
+embed_yt('VusKAosxxyk')
+```
+
+
 ### 2.2.1 Measuring the quality of fit {-}
+
+#### Mean squared error (MSE) {-}
+
+$$
+MSE = \frac1n \sum_{i=1}^n [y_i - \hat f(x_i)]^2
+$$
+
+* This is the mean of the squared residuals.
+
+* If this is small on training data, it may be a sign of overfitting.
+
+* Better compute this on test data.
+
+* [Cross-validation]{.hl} will set aside part of the data for testing.
+
+* A trade-off between MSE and flexibility: more flexible models tend to overfit.
+
+  ![](images/ch02-03.png){ style="width: 90%" .center }
+
+* Flexibility has to do with the number of [degrees of freedom]{.hl}.
 
 
 ### 2.2.2 The bias-variance trade-off {-}
+
 
 
 ### 2.2.3 The classification setting {-}

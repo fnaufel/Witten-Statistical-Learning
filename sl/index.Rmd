@@ -15,24 +15,6 @@ link-citations: yes
 
 # 1 Introduction {-}
 
-
-* No braces: $1,23$
-
-* Braces: $1{,}23$
-
-* Inline R with fm: $`r (123/100) %>% fm()`$
-
-* Inline R without fm: $`r 123/100`$
-
-* Chunk
-
-```{r}
-123/100
-```
-
-
-
-
 * Book site: https://www.statlearning.com/
 
 * Online course: https://www.dataschool.io/15-hours-of-expert-machine-learning-videos/

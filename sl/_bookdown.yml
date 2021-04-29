@@ -3,5 +3,6 @@ before_chapter_script: "_common.R"
 
 rmd_files: [
   'index.Rmd',
-  '02-statistical-learning.Rmd'
+  '02-statistical-learning.Rmd', 
+  '03-linear-regression.Rmd'
 ]
