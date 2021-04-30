@@ -152,7 +152,7 @@ $$
 * We want to compute the test MSE:
 
   $$
-  E\left[(y - \hat f_{\!D}(x))^2\right]
+  E\left[(\hat f_{\!D}(x) - y)^2\right]
   $$
   
 * We are averaging over many possible $\hat f_{\!D}$ functions, each one the result of training the model using a different training set $D$. We are also averaging over all $x$ and $y$ drawn from the joint distribution $P(x,y)$.
@@ -160,7 +160,7 @@ $$
 * We can write the expected test MSE as
 
   $$
-  MSE = E_{x, y, D}\left[(y - \hat f_{\!D}(x))^2\right]
+  MSE = E_{x, y, D}\left[(\hat f_{\!D}(x) - y)^2\right]
   $$
   
 
@@ -179,7 +179,7 @@ $$
 * The expected test MSE can be decomposed as
 
   $$
-  E\left[(y - \hat f_{\!D}(x))^2\right] = 
+  E\left[(\hat f_{\!D}(x) - y)^2\right] = 
     \text{Var}(\hat f_{\!D}(x)) + \left[ E(\hat f_{\!D}(x)) - f(x) \right]^2 +
     \text{Var}(\varepsilon)
   $$
@@ -188,13 +188,13 @@ $$
 
 ### The bias-variance decomposition {-}
 
-* Taken from http://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html
+* Taken from http://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html, adapted to our notation here.
 
 * To make it clear that the expectation is over $x, y$ and $D$, let's write
 
   $$
   \begin{equation}
-    E_{x, y, D}\left[(y - \hat f_{\!D}(x))^2\right]
+    E_{x, y, D}\left[(\hat f_{\!D}(x) - y)^2\right]
   \end{equation}
   $$
 
@@ -205,8 +205,8 @@ $$
     E_{x, y, D}
       \left[
         \left[
-        [(y - E(\hat f_{\!D}(x))] +
-        [E(\hat f_{\!D}(x)) + \hat f_{\!D}(x))]
+        [\hat f_{\!D}(x) - E(\hat f_{\!D}(x))] +
+        [E(\hat f_{\!D}(x)) - y)]
         \right]^2
       \right] 
   \end{equation}
@@ -216,22 +216,111 @@ $$
 
   $$
   \begin{gather}
-    E_{x, y, D}\left[(y - E(\hat f_{\!D}(x)))^2\right] 
-    + E_{x, y, D}\left[(E(\hat f_{\!D}(x)) + \hat f_{\!D}(x))^2\right] \\
-    {} + 2E_{x, y, D}\left[(y - E(\hat f_{\!D}(x))) \cdot
-        (E(\hat f_{\!D}(x)) + \hat f_{\!D}(x)) \right]
+    E_{x, y, D}\left[ (\hat f_{\!D}(x) - E(\hat f_{\!D}(x)))^2 \right] 
+    + E_{x, y, D}\left[ (E(\hat f_{\!D}(x)) - y))^2 \right] \\
+    {} + 2E_{x, y, D}\left[ (\hat f_{\!D}(x) - E(\hat f_{\!D}(x))) \cdot (E(\hat f_{\!D}(x)) - y)) \right]
+    (\#eq:main)
   \end{gather}
   $$
 
-* The last term equals zero:
+* The last term in \@ref(eq:main) equals zero:
 
 $$
 \begin{align*}
-  & E_{x, y, D}\left[(y - E(\hat f_{\!D}(x))) \cdot
-        (E(\hat f_{\!D}(x)) + \hat f_{\!D}(x)) \right]
+  & E_{x, y, D}\left[ (\hat f_{\!D}(x) - E(\hat f_{\!D}(x))) \cdot (E(\hat f_{\!D}(x)) - y) \right] \\
+  &= E_{x, y} \left[ 
+    E_D \left[ 
+      \hat f_{\!D}(x) - E(\hat f_{\!D}(x))
+    \right]
+    \cdot (E(\hat f_{\!D}(x)) - y)
+  \right] \\
+  &= E_{x, y} \left[ 
+    \left[ 
+      E(\hat f_{\!D}(x)) - E(\hat f_{\!D}(x))
+    \right]
+    \cdot (E(\hat f_{\!D}(x)) - y)
+  \right] \\
+  &= E_{x, y} \left[ 
+    0 \cdot (E(\hat f_{\!D}(x)) - y)
+  \right] \\
+  &= 0
 \end{align*}
 $$
 
+* The first term in \@ref(eq:main) is the variance. Note that it does not depend on $y$.
+
+  $$
+  \text{Var}(\hat f) = E_{x, D}\left[ (\hat f_{\!D}(x) - E(\hat f_{\!D}(x)))^2 \right]
+  $$
+
+* We now develop the second term in \@ref(eq:main). Note that it does not depend on $D$.
+
+  $$
+  E_{x, y}\left[ (E(\hat f_{\!D}(x)) - y))^2 \right]
+  $$
+
+* It is important to recall now that
+
+  $$
+  \begin{equation}
+    f(x) = E(Y \mid X = x)
+    (\#eq:fx)
+  \end{equation}
+  $$
+
+  for all $x$ in the population.
+
+* We use the same trick as before, now adding and subtracting $f(x)$:
+
+  $$
+  E_{x, y}\left[ 
+    \left[
+    [
+      E(\hat f_{\!D}(x)) - f(x)
+    ] +
+    [
+    f(x) - y
+    ]
+    \right]^2 
+  \right]
+  $$
+
+* Now, we expand the binomial and distribute the expectation:
+
+  $$
+  \begin{gather}
+    E_{x, y}\left[ (E(\hat f_{\!D}(x)) - f(x))^2 \right] 
+    + E_{x, y}\left[ (f(x) - y)^2 \right] \\
+    {} + 2E_{x, y}\left[ (E(\hat f_{\!D}(x)) - f(x)) \cdot (f(x) - y) \right]
+    (\#eq:main2)
+  \end{gather}
+  $$
+
+* As before, we note that the last term in \@ref(eq:main2) equals zero, using \@ref(eq:fx):
+
+  $$
+  \begin{align*}
+    & E_{x, y}\left[ (E(\hat f_{\!D}(x)) - f(x)) \cdot (f(x) - y) \right] \\
+    &= E_{x, y}\left[ (f(x) - y) \cdot (E(\hat f_{\!D}(x)) - f(x)) \right] \\
+    &= E_x \left[ E_{y \mid x}[f(x) - y] \cdot (E(\hat f_{\!D}(x)) - f(x)) \right] \\ 
+    &= E_x \left[ [f(x) - f(x)] \cdot (E(\hat f_{\!D}(x)) - f(x)) \right] \\ 
+    &= E_x \left[ 0 \cdot (E(\hat f_{\!D}(x)) - f(x)) \right] \\ 
+    &= 0
+  \end{align*}
+  $$
+
+* The first term in \@ref(eq:main2) is the squared bias:
+
+  $$
+  \text{Bias}^2 = E_{x}\left[ (E(\hat f_{\!D}(x)) - f(x))^2 \right] 
+  $$
+
+* And the second term in \@ref(eq:main2) is the noise $\text{Var}(\varepsilon)$:
+
+  $$
+  \text{Var}(\varepsilon) = E_{x, y}\left[ (f(x) - y)^2 \right]
+  $$
+  
 
 ### 2.2.3 The classification setting {-}
 
