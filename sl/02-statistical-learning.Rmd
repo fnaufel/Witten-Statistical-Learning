@@ -143,41 +143,94 @@ $$
 
 ### 2.2.2 The bias-variance trade-off {-}
 
-* Suppose we have a model fitted using training data $Tr$, giving us $\hat f$.
+* Suppose we have a model fitted using training data $D$, giving us $\hat f_{\!D}$.
 
-* Now we have a test observation $(x_0, y_0)$ from the population.
+* Now we have a test observation $(x, y)$ from the population.
 
 * The true function is $Y = f(X) + \varepsilon$, with $f(x) = E(Y \mid X = x)$.
 
 * We want to compute the test MSE:
 
   $$
-  E\left[(y_0 - \hat f(x_0))^2\right]
+  E\left[(y - \hat f_{\!D}(x))^2\right]
   $$
   
-* We are averaging over many possible $\hat f$ functions, each one the result of training the model using a different training set. So $x_0$ and $y_0$ are fixed.
+* We are averaging over many possible $\hat f_{\!D}$ functions, each one the result of training the model using a different training set $D$. We are also averaging over all $x$ and $y$ drawn from the joint distribution $P(x,y)$.
+
+* We can write the expected test MSE as
+
+  $$
+  MSE = E_{x, y, D}\left[(y - \hat f_{\!D}(x))^2\right]
+  $$
+  
 
 * The MSE will have the following components:
 
   * The irreducible error, as before: $\text{Var}(\varepsilon)$.
   
-  * The variability of $\hat f(x_0)$, depending on the training data: $\text{Var}(\hat f(x_0))$. This does not take into consideration the correct response $y_0$. This is called the [variance]{.hl}.
+  * The variability of $\hat f_{\!D}(x)$, depending on the training data $D$: $\text{Var}(\hat f_{\!D}(x))$. This does not take into consideration the correct response $y$. This is called the [variance]{.hl}.
   
-  * The squared [bias]{.hl} of $\hat f(x_0)$: $\left[ E(\hat f(x_0)) - f(x_0) \right]^2$. The bias averages over all possible training sets. It measures the difference between the average value of $\hat f(x_0)$ and the true value of $f(x_0)$.
+  * The squared [bias]{.hl} of $\hat f_{\!D}(x)$: $\left[ E(\hat f(x)) - f(x) \right]^2$. The bias averages over all possible training sets. It measures the difference between the average value of $\hat f_{\!D}(x)$ and the true value of $f(x).$
   
-* The more flexible the model, the greater the variance of $\hat f(x_0)$, because it is heavily affected by the training data. 
+* The more flexible the model, the greater the variance of $\hat f_{\!D}(x)$, because it is heavily affected by the training data. 
 
-* The more flexible the model, the smaller the bias of $\hat f(x_0)$, because [although $\hat f(x_0)$ varies a lot, depending on the training set --- in fact, precisely *because* it varies in sync with the training data --- its average is close to $f(x_0)$.]{.hl}
+* The more flexible the model, the smaller the bias of $\hat f_{\!D}(x)$, because [although $\hat f_{\!D}(x)$ varies a lot, depending on the training set --- in fact, precisely *because* it varies in sync with the training data --- its average is close to $f(x)$.]{.hl}
 
-* So the expected MSE (over all possible training sets) is
+* The expected test MSE can be decomposed as
 
   $$
-  E\left[(y_0 - \hat f(x_0))^2\right] = 
-    \text{Var}(\hat f(x_0)) + \left[ E(\hat f(x_0)) - f(x_0) \right]^2 +
+  E\left[(y - \hat f_{\!D}(x))^2\right] = 
+    \text{Var}(\hat f_{\!D}(x)) + \left[ E(\hat f_{\!D}(x)) - f(x) \right]^2 +
     \text{Var}(\varepsilon)
   $$
 
-* The overall expected test MSE is computed by averaging the above over all possible values of $x_0$ in the test set.
+
+
+### The bias-variance decomposition {-}
+
+* Taken from http://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html
+
+* To make it clear that the expectation is over $x, y$ and $D$, let's write
+
+  $$
+  \begin{equation}
+    E_{x, y, D}\left[(y - \hat f_{\!D}(x))^2\right]
+  \end{equation}
+  $$
+
+* We start with the trick of adding and subtracting $E(\hat f_{\!D}(x))$:
+
+  $$
+  \begin{equation}
+    E_{x, y, D}
+      \left[
+        \left[
+        [(y - E(\hat f_{\!D}(x))] +
+        [E(\hat f_{\!D}(x)) + \hat f_{\!D}(x))]
+        \right]^2
+      \right] 
+  \end{equation}
+  $$
+
+* Now, we expand the binomial and distribute the expectation:
+
+  $$
+  \begin{gather}
+    E_{x, y, D}\left[(y - E(\hat f_{\!D}(x)))^2\right] 
+    + E_{x, y, D}\left[(E(\hat f_{\!D}(x)) + \hat f_{\!D}(x))^2\right] \\
+    {} + 2E_{x, y, D}\left[(y - E(\hat f_{\!D}(x))) \cdot
+        (E(\hat f_{\!D}(x)) + \hat f_{\!D}(x)) \right]
+  \end{gather}
+  $$
+
+* The last term equals zero:
+
+$$
+\begin{align*}
+  & E_{x, y, D}\left[(y - E(\hat f_{\!D}(x))) \cdot
+        (E(\hat f_{\!D}(x)) + \hat f_{\!D}(x)) \right]
+\end{align*}
+$$
 
 
 ### 2.2.3 The classification setting {-}
